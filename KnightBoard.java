@@ -1,8 +1,12 @@
 public class KnightBoard{
+  private int[][] boardSequence;
 /*  @throws IllegalArgumentException when either parameter is negative.
 */
   public KnightBoard(int startingRows,int startingCols){
-
+    if (startingRows < 0 || startingCols < 0){
+      throw new IllegalArgumentException();
+    }
+    boardSequence = new int[startingRows][startingCols];
   }
 
   public String toString(){
