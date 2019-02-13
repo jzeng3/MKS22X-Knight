@@ -3,6 +3,14 @@ public class KnightBoard{
   public static void main(String[] args){
     KnightBoard test = new KnightBoard(3,3);
     System.out.println(test);
+    test.moveKnight(0,0,2,1);
+    System.out.println(test);
+    test.moveKnight(2,1,-2,-1);
+    System.out.println(test);
+    test.moveKnight(0,0,1,2);
+    System.out.println(test);
+    test.moveKnight(1,2,1,-2);
+    System.out.println(test);
   }
   private int[][] boardSequence;
 /*  @throws IllegalArgumentException when either parameter is negative.
@@ -49,7 +57,7 @@ public class KnightBoard{
     return false;
   }
   // move knight by specified x (left/right) and y (up/down)
-  private boolean moveKnight(int row, int col, int x, int y){
+  private boolean moveKnight(int row, int col, int y, int x){
     // if move is in range of the board
     if (col + x < boardSequence[0].length && col + x >= 0 &&
         row + y < boardSequence.length && row + y >= 0){
