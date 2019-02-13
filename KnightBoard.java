@@ -3,14 +3,17 @@ public class KnightBoard{
   public static void main(String[] args){
     KnightBoard test = new KnightBoard(3,3);
     System.out.println(test);
-    test.moveKnight(0,0,2,1);
+    test.solveH(0,0,1);
+    System.out.println(test);
+  /*  test.moveKnight(0,0,2,1);
     System.out.println(test);
     test.moveKnight(2,1,-2,-1);
     System.out.println(test);
     test.moveKnight(0,0,1,2);
     System.out.println(test);
     test.moveKnight(1,2,1,-2);
-    System.out.println(test);
+    System.out.println(test);*/
+
   }
   private int[][] boardSequence;
 /*  @throws IllegalArgumentException when either parameter is negative.
@@ -54,6 +57,20 @@ public class KnightBoard{
   }
   // level is the # of the knight
   private boolean solveH(int row ,int col, int level){
+if (level == boardSequence.length * boardSequence[0].length){
+  return true;
+}
+else if (row >= 0 && row < boardSequence.length && col >= 0 && col < boardSequence[0].length){
+boardSequence[row][col] = level;
+solveH(row+1,col+2,level+1);
+solveH(row+1,col-2,level+1);
+solveH(row-1,col-2,level+1);
+solveH(row-1,col+2,level+1);
+solveH(row+2,col+1,level+1);
+solveH(row+2,col-1,level+1);
+solveH(row-2,col+1,level+1);
+solveH(row-2,col-1,level+1);
+}
     return false;
   }
   // move knight by specified x (left/right) and y (up/down)
