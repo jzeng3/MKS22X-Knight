@@ -61,15 +61,17 @@ if (level == boardSequence.length * boardSequence[0].length){
   return true;
 }
 else if (row >= 0 && row < boardSequence.length && col >= 0 && col < boardSequence[0].length){
-boardSequence[row][col] = level;
-solveH(row+1,col+2,level+1);
-solveH(row+1,col-2,level+1);
-solveH(row-1,col-2,level+1);
-solveH(row-1,col+2,level+1);
-solveH(row+2,col+1,level+1);
-solveH(row+2,col-1,level+1);
-solveH(row-2,col+1,level+1);
-solveH(row-2,col-1,level+1);
+if (boardSequence[row][col] == 0){
+  boardSequence[row][col] = level;
+return solveH(row+1,col+2,level+1)
+  || solveH(row+1,col-2,level+1)
+  || solveH(row-1,col-2,level+1)
+|| solveH(row-1,col+2,level+1)
+|| solveH(row+2,col+1,level+1)
+|| solveH(row+2,col-1,level+1)
+|| solveH(row-2,col+1,level+1)
+|| solveH(row-2,col-1,level+1);
+}
 }
     return false;
   }
