@@ -1,7 +1,7 @@
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(3,3);
+    KnightBoard test = new KnightBoard(4,4);
     System.out.println(test);
     test.solveH(0,0,1);
     System.out.println(test);
@@ -37,10 +37,10 @@ public class KnightBoard{
       for (int c = 0; c < boardSequence[0].length; c++){
         // add extra space if number is less than 10 for nice formatting
         if (boardSequence[r][c] < 10){
-          boardStr += " " + boardSequence[r][c];
+          boardStr += "  " + boardSequence[r][c];
         }
         else{
-          boardStr += boardSequence[r][c];
+          boardStr += " " + boardSequence[r][c];
         }
         if (c == boardSequence[0].length - 1){
           boardStr += "\n";
@@ -58,10 +58,13 @@ public class KnightBoard{
   // level is the # of the knight
   private boolean solveH(int row ,int col, int level){
 if (level == boardSequence.length * boardSequence[0].length){
+  System.out.println("All levels reached");
   return true;
 }
-else if (row >= 0 && row < boardSequence.length && col >= 0 && col < boardSequence[0].length){
+else{
+if (boardSequence[row][col] == 0 && row >= 0 && row < boardSequence.length && col >= 0 && col < boardSequence[0].length){
 if (boardSequence[row][col] == 0){
+  System.out.println("level "+level);
   boardSequence[row][col] = level;
 return solveH(row+1,col+2,level+1)
   || solveH(row+1,col-2,level+1)
@@ -73,20 +76,30 @@ return solveH(row+1,col+2,level+1)
 || solveH(row-2,col-1,level+1);
 }
 }
+}
+    System.out.println("Not all levels were reached");
     return false;
   }
   // move knight by specified x (left/right) and y (up/down)
-  private boolean moveKnight(int row, int col, int y, int x){
+  private boolean addKnight(int row, int col, int level){
     // if move is in range of the board
-    if (col + x < boardSequence[0].length && col + x >= 0 &&
-        row + y < boardSequence.length && row + y >= 0){
-          // if move is a valid knight move
-          if (Math.abs(x) == 1 && Math.abs(y) == 2
-             || Math.abs(x) == 2 && Math.abs(y) == 1){
+    if (boardSequence[row][col] == 0 &&
+       row >= 0 && row < boardSequence.length &&
+       col >= 0 && col < boardSequence[0].length){
                // mark spot as next number in the sequence
-              boardSequence[row + y][col + x] = boardSequence[row][col] + 1;
+              boardSequence[row][col] = level;
               return true;
-             }
+    }
+    return false;
+  }
+  private boolean removeKnight(int row, int col, int level){
+    // if move is in range of the board
+    if (boardSequence[row][col] != 0 &&
+       row >= 0 && row < boardSequence.length &&
+       col >= 0 && col < boardSequence[0].length){
+               // mark spot as next number in the sequence
+              boardSequence[row][col] = level;
+              return true;
     }
     return false;
   }
