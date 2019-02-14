@@ -67,44 +67,47 @@ public boolean solve(int startingRow, int startingCol)
   // level is the # of the knight
   private boolean solveH(int row ,int col, int level){
 if (level == boardSequence.length * boardSequence[0].length){
-  System.out.println("All levels reached");
+  // System.out.println("All levels reached");
   return true;
 }
 else{
+for (int i = 0; i < boardSequence.length; i++){
   // check if knight can be added
-if (addKnight(row,col,level)){
+if (addKnight(row+i,col,level)){
+  System.out.println("added knight to "+ (row+i) + " "+col+" at level " + level);
 //  System.out.println("level "+level);
-boardSequence[row][col] = level;
+boardSequence[row+i][col] = level;
 // recursively call on all possible moves
-if (solveH(row+1,col+2,level+1)){
+if (solveH(row+i+1,col+2,level+1)){
   return true;
 }
-if (solveH(row+1,col-2,level+1)){
+if (solveH(row+i+1,col-2,level+1)){
   return true;
 }
-if (solveH(row-1,col-2,level+1)){
+if (solveH(row+i-1,col-2,level+1)){
   return true;
 }
-if (solveH(row-1,col+2,level+1)){
+if (solveH(row+i-1,col+2,level+1)){
   return true;
 }
-if (solveH(row+2,col+1,level+1)){
+if (solveH(row+i+2,col+1,level+1)){
   return true;
 }
-if (solveH(row+2,col-1,level+1)){
+if (solveH(row+i+2,col-1,level+1)){
   return true;
 }
-if (solveH(row-2,col+1,level+1)){
+if (solveH(row+i-2,col+1,level+1)){
   return true;
 }
-if (solveH(row-2,col-1,level+1)){
+if (solveH(row+i-2,col-1,level+1)){
   return true;
 }
-removeKnight(row, col, 0);
+removeKnight(row+i, col, 0);
+}
 }
 
 }
-    System.out.println("Not all levels were reached");
+    // System.out.println("Not all levels were reached");
     return false;
   }
   // move knight by specified x (left/right) and y (up/down)
