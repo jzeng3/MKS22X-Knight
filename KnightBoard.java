@@ -1,10 +1,17 @@
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(7,7);
+    KnightBoard test = new KnightBoard(3,10);
     System.out.println(test);
-    System.out.println(test.solve(0,0));
-    System.out.println(test);
+    for (int r = 0; r < 3; r++){
+      for (int c = 0; c < 10; c++){
+        if (test.solve(r,c)){
+          System.out.println(test);
+          c = 10;
+          r = 3;
+         }
+       }
+    }
   /*  test.moveKnight(0,0,2,1);
     System.out.println(test);
     test.moveKnight(2,1,-2,-1);
@@ -74,15 +81,14 @@ public boolean solve(int startingRow, int startingCol)
   @throws IllegalArgumentException when either parameter is negative
   or out of bounds.*/
   public boolean solve(int startingRow, int startingCol){
-    System.out.println(solveH(0,0,1));
-    return solveH(0,0,1);
+    return solveH(startingRow, startingCol, 1);
   }
   public int countSolutions(int startingRow, int startingCol){
     return 0;
   }
   // level is the # of the knight
   private boolean solveH(int row ,int col, int level){
-  //  System.out.println(KnightBoard.go(1,1));
+  // System.out.println(KnightBoard.go(1,1));
 //System.out.println(this);
 //KnightBoard.wait(50); //adjust this delay
 
@@ -94,9 +100,9 @@ else{
 for (int i = 0; i < 1;i++){
   // check if knight can be added
 if (addKnight(row,col,level)){
-  // System.out.println("i: "+i);
+//   System.out.println("i: "+i);
 //  System.out.println("added knight to "+ (row+i) + " "+col+" at level " + level);
-//  System.out.println("level "+level);
+ //System.out.println("level "+level);
 boardSequence[row][col] = level;
 // recursively call on all possible moves
 if (solveH(row+1,col+2,level+1)){
