@@ -1,9 +1,9 @@
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(4,4);
+    KnightBoard test = new KnightBoard(3,3);
     System.out.println(test);
-    test.solve(0,0);
+    System.out.println(test.solve(0,0));
     System.out.println(test);
   /*  test.moveKnight(0,0,2,1);
     System.out.println(test);
@@ -36,10 +36,13 @@ public class KnightBoard{
     for (int r = 0; r < boardSequence.length; r++){
       for (int c = 0; c < boardSequence[0].length; c++){
         // add extra space if number is less than 10 for nice formatting
-        if (boardSequence[r][c] < 10){
+        if (boardSequence[r][c] == 0){
+          boardStr += " " + "__";
+        }
+        else if (boardSequence[r][c] < 10){
           boardStr += "  " + boardSequence[r][c];
         }
-        else{
+        else if (boardSequence[r][c] >= 10){
           boardStr += " " + boardSequence[r][c];
         }
         if (c == boardSequence[0].length - 1){
@@ -71,6 +74,7 @@ public boolean solve(int startingRow, int startingCol)
   @throws IllegalArgumentException when either parameter is negative
   or out of bounds.*/
   public boolean solve(int startingRow, int startingCol){
+    System.out.println(solveH(0,0,1));
     return solveH(0,0,1);
   }
   public int countSolutions(int startingRow, int startingCol){
@@ -78,11 +82,11 @@ public boolean solve(int startingRow, int startingCol)
   }
   // level is the # of the knight
   private boolean solveH(int row ,int col, int level){
-    System.out.println(KnightBoard.go(1,1));
-System.out.println(this);
-KnightBoard.wait(5); //adjust this delay
+  //  System.out.println(KnightBoard.go(1,1));
+//System.out.println(this);
+//KnightBoard.wait(5); //adjust this delay
 
-if (level == boardSequence.length * boardSequence[0].length){
+if (level >= boardSequence.length * boardSequence[0].length){
   // System.out.println("All levels reached");
   return true;
 }
@@ -126,6 +130,7 @@ removeKnight(row, col, 0);
     // System.out.println("Not all levels were reached");
     return false;
   }
+
   // move knight by specified x (left/right) and y (up/down)
   private boolean addKnight(int row, int col, int level){
     // if move is in range of the board
