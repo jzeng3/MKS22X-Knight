@@ -89,11 +89,11 @@ if (level == boardSequence.length * boardSequence[0].length){
 else{
 for (int i = 0; i < boardSequence.length; i++){
   // check if knight can be added
-if (addKnight(row+i,col,level)){
+if (addKnight(row,col,level)){
 //  System.out.println("i: "+i);
 //  System.out.println("added knight to "+ (row+i) + " "+col+" at level " + level);
 //  System.out.println("level "+level);
-boardSequence[row+i][col] = level;
+boardSequence[row][col] = level;
 // recursively call on all possible moves
 if (solveH(row+i+1,col+2,level+1)){
   return true;
