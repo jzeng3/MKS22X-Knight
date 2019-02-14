@@ -49,6 +49,18 @@ public class KnightBoard{
     }
     return boardStr;
   }
+// taken from Mr. K's website for debugging
+public static String go(int x,int y){
+       return ("\033[" + x + ";" + y + "H");
+   }
+   public static void wait(int millis){
+          try {
+              Thread.sleep(millis);
+          }
+          catch (InterruptedException e) {
+          }
+      }
+
 /*  Modifies the board by labeling the moves from 1 (at startingRow,startingCol) up to the area of the board in proper knight move steps.
 @throws IllegalStateException when the board contains non-zero values.
 @throws IllegalArgumentException when either parameter is negative
@@ -66,6 +78,10 @@ public boolean solve(int startingRow, int startingCol)
   }
   // level is the # of the knight
   private boolean solveH(int row ,int col, int level){
+    System.out.println(KnightBoard.go(1,1));
+System.out.println(this);
+KnightBoard.wait(500); //adjust this delay
+
 if (level == boardSequence.length * boardSequence[0].length){
   // System.out.println("All levels reached");
   return true;
@@ -74,7 +90,8 @@ else{
 for (int i = 0; i < boardSequence.length; i++){
   // check if knight can be added
 if (addKnight(row+i,col,level)){
-  System.out.println("added knight to "+ (row+i) + " "+col+" at level " + level);
+//  System.out.println("i: "+i);
+//  System.out.println("added knight to "+ (row+i) + " "+col+" at level " + level);
 //  System.out.println("level "+level);
 boardSequence[row+i][col] = level;
 // recursively call on all possible moves
@@ -84,10 +101,10 @@ if (solveH(row+i+1,col+2,level+1)){
 if (solveH(row+i+1,col-2,level+1)){
   return true;
 }
-if (solveH(row+i-1,col-2,level+1)){
+if (solveH(row-i-1,col-2,level+1)){
   return true;
 }
-if (solveH(row+i-1,col+2,level+1)){
+if (solveH(row-i-1,col+2,level+1)){
   return true;
 }
 if (solveH(row+i+2,col+1,level+1)){
@@ -96,13 +113,13 @@ if (solveH(row+i+2,col+1,level+1)){
 if (solveH(row+i+2,col-1,level+1)){
   return true;
 }
-if (solveH(row+i-2,col+1,level+1)){
+if (solveH(row-i-2,col+1,level+1)){
   return true;
 }
-if (solveH(row+i-2,col-1,level+1)){
+if (solveH(row-i-2,col-1,level+1)){
   return true;
 }
-removeKnight(row+i, col, 0);
+removeKnight(row, col, 0);
 }
 }
 
