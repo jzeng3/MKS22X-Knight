@@ -3,7 +3,7 @@ public class KnightBoard{
   public static void main(String[] args){
     KnightBoard test = new KnightBoard(4,4);
     System.out.println(test);
-    test.solveH(0,0,1);
+    test.solve(0,0);
     System.out.println(test);
   /*  test.moveKnight(0,0,2,1);
     System.out.println(test);
@@ -49,9 +49,18 @@ public class KnightBoard{
     }
     return boardStr;
   }
+/*  Modifies the board by labeling the moves from 1 (at startingRow,startingCol) up to the area of the board in proper knight move steps.
+@throws IllegalStateException when the board contains non-zero values.
+@throws IllegalArgumentException when either parameter is negative
+ or out of bounds.
+@returns true when the board is solvable from the specified starting position
+public boolean solve(int startingRow, int startingCol)
 /*  @throws IllegalStateException when the board contains non-zero values.
   @throws IllegalArgumentException when either parameter is negative
   or out of bounds.*/
+  public boolean solve(int startingRow, int startingCol){
+    return solveH(0,0,1);
+  }
   public int countSolutions(int startingRow, int startingCol){
     return 0;
   }
@@ -62,20 +71,38 @@ if (level == boardSequence.length * boardSequence[0].length){
   return true;
 }
 else{
-if (boardSequence[row][col] == 0 && row >= 0 && row < boardSequence.length && col >= 0 && col < boardSequence[0].length){
-if (boardSequence[row][col] == 0){
-  System.out.println("level "+level);
-  boardSequence[row][col] = level;
-return solveH(row+1,col+2,level+1)
-  || solveH(row+1,col-2,level+1)
-  || solveH(row-1,col-2,level+1)
-|| solveH(row-1,col+2,level+1)
-|| solveH(row+2,col+1,level+1)
-|| solveH(row+2,col-1,level+1)
-|| solveH(row-2,col+1,level+1)
-|| solveH(row-2,col-1,level+1);
+  // check if knight can be added
+if (addKnight(row,col,level)){
+//  System.out.println("level "+level);
+boardSequence[row][col] = level;
+// recursively call on all possible moves
+if (solveH(row+1,col+2,level+1)){
+  return true;
 }
+if (solveH(row+1,col-2,level+1)){
+  return true;
 }
+if (solveH(row-1,col-2,level+1)){
+  return true;
+}
+if (solveH(row-1,col+2,level+1)){
+  return true;
+}
+if (solveH(row+2,col+1,level+1)){
+  return true;
+}
+if (solveH(row+2,col-1,level+1)){
+  return true;
+}
+if (solveH(row-2,col+1,level+1)){
+  return true;
+}
+if (solveH(row-2,col-1,level+1)){
+  return true;
+}
+removeKnight(row, col, 0);
+}
+
 }
     System.out.println("Not all levels were reached");
     return false;
@@ -83,9 +110,10 @@ return solveH(row+1,col+2,level+1)
   // move knight by specified x (left/right) and y (up/down)
   private boolean addKnight(int row, int col, int level){
     // if move is in range of the board
-    if (boardSequence[row][col] == 0 &&
+    if (
        row >= 0 && row < boardSequence.length &&
-       col >= 0 && col < boardSequence[0].length){
+       col >= 0 && col < boardSequence[0].length &&
+       boardSequence[row][col] == 0){
                // mark spot as next number in the sequence
               boardSequence[row][col] = level;
               return true;
@@ -94,9 +122,10 @@ return solveH(row+1,col+2,level+1)
   }
   private boolean removeKnight(int row, int col, int level){
     // if move is in range of the board
-    if (boardSequence[row][col] != 0 &&
+    if (
        row >= 0 && row < boardSequence.length &&
-       col >= 0 && col < boardSequence[0].length){
+       col >= 0 && col < boardSequence[0].length &&
+       boardSequence[row][col] != 0){
                // mark spot as next number in the sequence
               boardSequence[row][col] = level;
               return true;
