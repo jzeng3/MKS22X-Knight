@@ -1,7 +1,7 @@
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(3,3);
+    KnightBoard test = new KnightBoard(7,7);
     System.out.println(test);
     System.out.println(test.solve(0,0));
     System.out.println(test);
@@ -84,13 +84,14 @@ public boolean solve(int startingRow, int startingCol)
   private boolean solveH(int row ,int col, int level){
   //  System.out.println(KnightBoard.go(1,1));
 //System.out.println(this);
-//KnightBoard.wait(5); //adjust this delay
+//KnightBoard.wait(50); //adjust this delay
 
-if (level >= boardSequence.length * boardSequence[0].length){
+if (level > boardSequence.length * boardSequence[0].length){
   // System.out.println("All levels reached");
   return true;
 }
 else{
+for (int i = 0; i < 1;i++){
   // check if knight can be added
 if (addKnight(row,col,level)){
   // System.out.println("i: "+i);
@@ -99,32 +100,42 @@ if (addKnight(row,col,level)){
 boardSequence[row][col] = level;
 // recursively call on all possible moves
 if (solveH(row+1,col+2,level+1)){
+//  System.out.println("can solve");
   return true;
 }
-if (solveH(row+1,col-2,level+1)){
+else if (solveH(row+1,col-2,level+1)){
+  //System.out.println("can solve");
   return true;
 }
-if (solveH(row-1,col-2,level+1)){
+else if (solveH(row-1,col-2,level+1)){
+//  System.out.println("can solve");
   return true;
 }
-if (solveH(row-1,col+2,level+1)){
+else if (solveH(row-1,col+2,level+1)){
+  //System.out.println("can solve");
   return true;
 }
-if (solveH(row+2,col+1,level+1)){
+else if (solveH(row+2,col+1,level+1)){
+  //System.out.println("can solve");
   return true;
 }
-if (solveH(row+2,col-1,level+1)){
+else if (solveH(row+2,col-1,level+1)){
+  // System.out.println("can solve");
   return true;
 }
-if (solveH(row-2,col+1,level+1)){
+else if (solveH(row-2,col+1,level+1)){
+//  System.out.println("can solve");
   return true;
 }
-if (solveH(row-2,col-1,level+1)){
+else if (solveH(row-2,col-1,level+1)){
+//  System.out.println("can solve");
   return true;
 }
+// System.out.println("cannot solve, remove knight at "+row+" "+col);
 removeKnight(row, col, 0);
-}
 
+}
+}
 
 }
     // System.out.println("Not all levels were reached");
