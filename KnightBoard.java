@@ -1,17 +1,19 @@
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(3,10);
+    KnightBoard test = new KnightBoard(5, 5);
+  System.out.println(test + "test");
+    test.solve(0,0);
     System.out.println(test);
-    for (int r = 0; r < 3; r++){
+  /*  for (int r = 0; r < 3; r++){
       for (int c = 0; c < 10; c++){
         if (test.solve(r,c)){
           System.out.println(test);
           c = 10;
           r = 3;
-         }
+
        }
-    }
+    }*/
   /*  test.moveKnight(0,0,2,1);
     System.out.println(test);
     test.moveKnight(2,1,-2,-1);
@@ -23,6 +25,7 @@ public class KnightBoard{
 
   }
   private int[][] boardSequence;
+  private int[][] boardMoves;
 /*  @throws IllegalArgumentException when either parameter is negative.
 */
   public KnightBoard(int startingRows,int startingCols){
@@ -34,6 +37,7 @@ public class KnightBoard{
     for (int r = 0; r < startingRows; r++){
       for (int c = 0; c < startingCols; c++){
         boardSequence[r][c] = 0;
+
       }
     }
   }
@@ -86,61 +90,38 @@ public boolean solve(int startingRow, int startingCol)
   public int countSolutions(int startingRow, int startingCol){
     return 0;
   }
+  private int countSolutionsH(int startingRow, int startingCol, int level){
+    if (level > boardSequence.length * boardSequence[0].length){
+      return 1;
+    }
+    int numSolns = 0;
+    return numSolns;
+  }
   // level is the # of the knight
-  private boolean solveH(int row ,int col, int level){
-  // System.out.println(KnightBoard.go(1,1));
-//System.out.println(this);
-//KnightBoard.wait(50); //adjust this delay
+private boolean solveH(int row ,int col, int level){
+/*System.out.println(KnightBoard.go(1,1));
+System.out.println(this);
+KnightBoard.wait(50);*/ //adjust this delay
 
 if (level > boardSequence.length * boardSequence[0].length){
   // System.out.println("All levels reached");
   return true;
 }
 else{
-for (int i = 0; i < 1;i++){
   // check if knight can be added
 if (addKnight(row,col,level)){
-//   System.out.println("i: "+i);
-//  System.out.println("added knight to "+ (row+i) + " "+col+" at level " + level);
- //System.out.println("level "+level);
 boardSequence[row][col] = level;
 // recursively call on all possible moves
-if (solveH(row+1,col+2,level+1)){
-//  System.out.println("can solve");
+if ( (solveH(row+1,col+2,level+1))
+       || (solveH(row+1,col-2,level+1))
+       || (solveH(row-1,col+2,level+1))
+       || solveH(row+2,col+1,level+1)
+       || solveH(row+2,col-1,level+1)
+       || solveH(row-2,col+1,level+1)
+      || solveH(row-2,col-1,level+1) ){
   return true;
 }
-else if (solveH(row+1,col-2,level+1)){
-  //System.out.println("can solve");
-  return true;
-}
-else if (solveH(row-1,col-2,level+1)){
-//  System.out.println("can solve");
-  return true;
-}
-else if (solveH(row-1,col+2,level+1)){
-  //System.out.println("can solve");
-  return true;
-}
-else if (solveH(row+2,col+1,level+1)){
-  //System.out.println("can solve");
-  return true;
-}
-else if (solveH(row+2,col-1,level+1)){
-  // System.out.println("can solve");
-  return true;
-}
-else if (solveH(row-2,col+1,level+1)){
-//  System.out.println("can solve");
-  return true;
-}
-else if (solveH(row-2,col-1,level+1)){
-//  System.out.println("can solve");
-  return true;
-}
-// System.out.println("cannot solve, remove knight at "+row+" "+col);
 removeKnight(row, col, 0);
-
-}
 }
 
 }
