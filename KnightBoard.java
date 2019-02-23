@@ -1,7 +1,7 @@
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(3, 4);
+    KnightBoard test = new KnightBoard(3,4);
   System.out.println(test + "test");
     System.out.println(test.countSolutions(0,0));
     System.out.println(test);
@@ -104,9 +104,9 @@ KnightBoard.wait(1);
       numSolns += countSolutionsH(row+1,col+2,level+1);
       numSolns += countSolutionsH(row+1,col-2,level+1);
       numSolns += countSolutionsH(row-1,col+2,level+1);
+      numSolns += countSolutionsH(row-1, col-2, level+1);
       numSolns += countSolutionsH(row+2,col+1,level+1);
       numSolns += countSolutionsH(row+2,col-1,level+1);
-    numSolns +=   countSolutionsH(row-1, col-1, level+1);
       numSolns += countSolutionsH(row-2,col+1,level+1);
       numSolns += countSolutionsH(row-2,col-1,level+1);
       removeKnight(row, col, 0);
@@ -132,7 +132,7 @@ boardSequence[row][col] = level;
 if ( solveH(row+1,col+2,level+1)
        || solveH(row+1,col-2,level+1)
        || solveH(row-1,col+2,level+1)
-       || solveH(row-1, col-1, level+1)
+       || solveH(row-1, col-2, level+1)
        || solveH(row+2,col+1,level+1)
        || solveH(row+2,col-1,level+1)
        || solveH(row-2,col+1,level+1)
