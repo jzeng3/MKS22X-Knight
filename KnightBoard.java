@@ -1,9 +1,9 @@
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(5, 5);
+    KnightBoard test = new KnightBoard(3, 1);
   System.out.println(test + "test");
-    test.solve(0,0);
+    System.out.println(test.countSolutions(0,0));
     System.out.println(test);
   /*  for (int r = 0; r < 3; r++){
       for (int c = 0; c < 10; c++){
@@ -88,13 +88,24 @@ public boolean solve(int startingRow, int startingCol)
     return solveH(startingRow, startingCol, 1);
   }
   public int countSolutions(int startingRow, int startingCol){
-    return 0;
+    return countSolutionsH(startingRow, startingCol, 1);
   }
-  private int countSolutionsH(int startingRow, int startingCol, int level){
+  private int countSolutionsH(int row, int col, int level){
     if (level > boardSequence.length * boardSequence[0].length){
       return 1;
     }
     int numSolns = 0;
+    if (addKnight(row, col, level)){
+      numSolns += countSolutionsH(row+1,col+2,level+1);
+      numSolns += countSolutionsH(row+1,col-2,level+1);
+      numSolns += countSolutionsH(row-1,col+2,level+1);
+      numSolns += countSolutionsH(row+2,col+1,level+1);
+      numSolns += countSolutionsH(row+2,col-1,level+1);
+      numSolns += countSolutionsH(row-1, col-1, level+1);
+      numSolns += countSolutionsH(row-2,col+1,level+1);
+      numSolns += countSolutionsH(row-2,col-1,level+1);
+    }
+    removeKnight(row, col, 0);
     return numSolns;
   }
   // level is the # of the knight
@@ -112,9 +123,10 @@ else{
 if (addKnight(row,col,level)){
 boardSequence[row][col] = level;
 // recursively call on all possible moves
-if ( (solveH(row+1,col+2,level+1))
-       || (solveH(row+1,col-2,level+1))
-       || (solveH(row-1,col+2,level+1))
+if ( solveH(row+1,col+2,level+1)
+       || solveH(row+1,col-2,level+1)
+       || solveH(row-1,col+2,level+1)
+       || solveH(row-1, col-1, level+1)
        || solveH(row+2,col+1,level+1)
        || solveH(row+2,col-1,level+1)
        || solveH(row-2,col+1,level+1)
