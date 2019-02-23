@@ -1,7 +1,7 @@
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(3,4);
+    KnightBoard test = new KnightBoard(5,4);
   System.out.println(test + "test");
     System.out.println(test.countSolutions(0,0));
     System.out.println(test);
@@ -88,30 +88,36 @@ public boolean solve(int startingRow, int startingCol)
     return solveH(startingRow, startingCol, 1);
   }
   public int countSolutions(int startingRow, int startingCol){
-    return countSolutionsH(startingRow, startingCol, 1);
+    return countSolutionsH(startingRow, startingCol, 1) / 8;
   }
   private int countSolutionsH(int row, int col, int level){
-   System.out.println(KnightBoard.go(1,1));
+  /* System.out.println(KnightBoard.go(1,1));
 System.out.println(this);
-KnightBoard.wait(1);
+KnightBoard.wait(1);*/
     if (level > boardSequence.length * boardSequence[0].length){
       return 1;
     }
     int numSolns = 0;
     if (addKnight(row, col, level)){
-      System.out.println(numSolns);
-      boardSequence[row][col] = level;
       numSolns += countSolutionsH(row+1,col+2,level+1);
+      //System.out.println("MOVE 1: level and numSolns "+ level + ", " + numSolns);
       numSolns += countSolutionsH(row+1,col-2,level+1);
+    //  System.out.println("MOVE 2: level and numSolns "+ level + ", " + numSolns);
       numSolns += countSolutionsH(row-1,col+2,level+1);
+    //  System.out.println("MOVE 3: level and numSolns "+ level + ", " + numSolns);
       numSolns += countSolutionsH(row-1, col-2, level+1);
+    //  System.out.println("MOVE 4: level and numSolns "+ level + ", " + numSolns);
       numSolns += countSolutionsH(row+2,col+1,level+1);
+    //  System.out.println("MOVE 5: level and numSolns "+ level + ", " + numSolns);
       numSolns += countSolutionsH(row+2,col-1,level+1);
+    //  System.out.println("MOVE 6: level and numSolns "+ level + ", " + numSolns);
       numSolns += countSolutionsH(row-2,col+1,level+1);
+    //  System.out.println("MOVE 7: level and numSolns "+ level + ", " + numSolns);
       numSolns += countSolutionsH(row-2,col-1,level+1);
+    //  System.out.println("MOVE 8: level and numSolns "+ level + ", " + numSolns);
       removeKnight(row, col, 0);
     }
-
+//    System.out.println("OUTSIDE: level and numSolns "+ level + ", " + numSolns);
     return numSolns;
   }
   // level is the # of the knight
