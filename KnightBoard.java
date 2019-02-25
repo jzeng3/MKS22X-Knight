@@ -27,7 +27,7 @@ System.out.println(test);*/
 
 }
 private int[][] boardSequence;
-private int[][] boardMoves;
+private ArrayList<int[]> boardMoves;
 /*  @throws IllegalArgumentException when either parameter is negative.
 */
 public KnightBoard(int startingRows,int startingCols){
@@ -42,7 +42,7 @@ public KnightBoard(int startingRows,int startingCols){
 
     }
   }
-  boardMoves = new int[startingRows][startingCols];
+  boardMoves = new ArrayList<int[]>(startingRows * startingCols);
 }
 
 public String toString(){
@@ -68,23 +68,7 @@ public String toString(){
 }
 public String toStringMoves(){
   String boardStr = "";
-  for (int r = 0; r < boardMoves.length; r++){
-    for (int c = 0; c < boardMoves[0].length; c++){
-      // add extra space if number is less than 10 for nice formatting
-      if (boardMoves[r][c] == 0){
-        boardStr += " " + "__";
-      }
-      else if (boardMoves[r][c] < 10){
-        boardStr += "  " + boardMoves[r][c];
-      }
-      else if (boardMoves[r][c] >= 10){
-        boardStr += " " + boardMoves[r][c];
-      }
-      if (c == boardSequence[0].length - 1){
-        boardStr += "\n";
-      }
-    }
-  }
+
   return boardStr;
 }
 // taken from Mr. K's website for debugging
@@ -220,13 +204,9 @@ private boolean removeKnight(int row, int col, int level){
 // fill out board with number of possible outgoing moves from each position
 private void outgoingMoves(int[][] boardMoves){
   // for boards with NO possible outgoing moves
-  if (boardMoves.length == 1 || boardMoves[0].length == 1
-  || (boardMoves.length == 2 && boardMoves[0].length == 2)){
-    for (int i = 0; i < boardMoves.length; i++){
-      for (int j = 0; j < boardMoves[0].length; j++){
-        boardMoves[i][j] = 0;
-      }
-    }
+  if (boardSequence.length == 1 || boardSequence[0].length == 1
+  || (boardSequence.length == 2 && boardSequence[0].length == 2)){
+    
   }
 
 }
