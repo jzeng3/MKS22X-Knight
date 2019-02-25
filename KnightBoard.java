@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
@@ -42,7 +43,8 @@ public KnightBoard(int startingRows,int startingCols){
 
     }
   }
-  boardMoves = new ArrayList<int[]>(startingRows * startingCols);
+  boardMoves = new ArrayList<int[]>();
+  outgoingMoves();
 }
 
 public String toString(){
@@ -68,7 +70,14 @@ public String toString(){
 }
 public String toStringMoves(){
   String boardStr = "";
-
+  for (int i = 0; i < boardSequence.length * boardSequence[0].length; i++){
+    if (boardMoves.get(i)[0] == 0){
+      boardStr += "  " + 0;
+    }
+    if (i%boardSequence[0].length == boardSequence[0].length -1){
+      boardStr += "\n";
+    }
+  }
   return boardStr;
 }
 // taken from Mr. K's website for debugging
@@ -202,13 +211,16 @@ private boolean removeKnight(int row, int col, int level){
   return false;
 }
 // fill out board with number of possible outgoing moves from each position
-private void outgoingMoves(int[][] boardMoves){
+private void outgoingMoves(){
+  for (int i = 0; i < boardSequence.length * boardSequence[0].length; i++){
+    int[] moveLocation = {0, i%boardSequence.length, i%boardSequence[0].length};
+    boardMoves.add(moveLocation);
   // for boards with NO possible outgoing moves
   if (boardSequence.length == 1 || boardSequence[0].length == 1
   || (boardSequence.length == 2 && boardSequence[0].length == 2)){
-    
-  }
 
+  }
+}
 }
 
 }
