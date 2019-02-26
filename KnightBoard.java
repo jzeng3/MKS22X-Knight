@@ -3,11 +3,11 @@ import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(8,8);
+    KnightBoard test = new KnightBoard(3,10);
     System.out.println(test + "test");
     System.out.println(test.toStringMoves());
-  //  System.out.println(test.countSolutions(0,0));
-  //  System.out.println(test);
+    System.out.println(test.solve(0,0));
+    System.out.println(test);
     /*  for (int r = 0; r < 3; r++){
     for (int c = 0; c < 10; c++){
     if (test.solve(r,c)){
@@ -151,21 +151,9 @@ private int countSolutionsH(int row, int col, int level){
   int numSolns = 0;
   // if knight can be added, try different possibilities for next level
   if (addKnight(row, col, level)){
-    numSolns += countSolutionsH(row+1,col+2,level+1);
-
-    numSolns += countSolutionsH(row+1,col-2,level+1);
-
-    numSolns += countSolutionsH(row-1,col+2,level+1);
-
-    numSolns += countSolutionsH(row-1, col-2, level+1);
-
-    numSolns += countSolutionsH(row+2,col+1,level+1);
-
-    numSolns += countSolutionsH(row+2,col-1,level+1);
-
-    numSolns += countSolutionsH(row-2,col+1,level+1);
-
-    numSolns += countSolutionsH(row-2,col-1,level+1);
+    for (int i = 0; i < 15; i+= 2){
+        numSolns += countSolutionsH(row+offsets[i],col+offsets[i+1],level+1);
+    }
 
     removeKnight(row, col, 0);
   }
@@ -186,15 +174,10 @@ private boolean solveH(int row ,int col, int level){
     if (addKnight(row,col,level)){
       boardSequence[row][col] = level;
       // recursively call on all possible moves
-      if ( solveH(row+1,col+2,level+1)
-      || solveH(row+1,col-2,level+1)
-      || solveH(row-1,col+2,level+1)
-      || solveH(row-1, col-2, level+1)
-      || solveH(row+2,col+1,level+1)
-      || solveH(row+2,col-1,level+1)
-      || solveH(row-2,col+1,level+1)
-      || solveH(row-2,col-1,level+1) ){
-        return true;
+      for (int i = 0; i < 15; i+= 2){
+        if (solveH(row+offsets[i],col+offsets[i+1],level+1)){
+          return true;
+        }
       }
       removeKnight(row, col, 0);
     }
