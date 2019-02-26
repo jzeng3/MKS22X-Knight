@@ -3,7 +3,7 @@ import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(3,10);
+    KnightBoard test = new KnightBoard(2,2);
     System.out.println(test + "test");
     System.out.println(test.toStringMoves());
     System.out.println(test.solve(0,0));
@@ -139,6 +139,7 @@ private boolean solveH(int row ,int col, int level){
   else{
     // check if knight can be added
     if (addKnight(row,col,level)){
+      updateMoves(row, col);
       // recursively call on all possible moves
       for (int i = 0; i < 15; i+= 2){
         if (solveH(row+offsets[i],col+offsets[i+1],level+1)){
@@ -222,6 +223,8 @@ private void updateMoves(int r, int c){
         boardMoves.add(moveLocation);
     }
    }
+   // sort the moves
+   insertionSort(boardMoves);
 }
 
  public static void insertionSort(ArrayList<int[]> data){
@@ -237,12 +240,12 @@ private void updateMoves(int r, int c){
         int temp[] = data.get(index);
        // if current num for outer loop is less than the previous number(s)
             // previous number moves up a space
-            data.get(index+1) = temp;
+            data.set( index+1, temp );
             // current number will be put at a smaller index
             index--;
         }
         // set element at index equal to current number (sorted)
-        data.get(index+1) = original;
+        data.set(index+1, original);
       }
     }
   }
