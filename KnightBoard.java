@@ -222,7 +222,29 @@ private void updateMoves(int r, int c){
         boardMoves.add(moveLocation);
     }
    }
-   // Collections.sort(boardMoves);
 }
+
+ public static void insertionSort(ArrayList<int[]> data){
+  if (data.size() >= 2){
+    // loop through array, checking number at current index relative to previous numbers
+    for (int i = 0; i < data.size(); i++){
+      // current number
+      int[] original = data.get(i);
+      int index = i-1;
+     // inner loop checks if previous elements are greater than current element
+      while (index >= 0 && data.get(i)[0] > original[0]){
+        // store the previous number
+        int temp[] = data.get(index);
+       // if current num for outer loop is less than the previous number(s)
+            // previous number moves up a space
+            data.get(index+1) = temp;
+            // current number will be put at a smaller index
+            index--;
+        }
+        // set element at index equal to current number (sorted)
+        data.get(index+1) = original;
+      }
+    }
+  }
 
 }
