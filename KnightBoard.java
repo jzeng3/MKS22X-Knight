@@ -28,7 +28,9 @@ System.out.println(test);*/
 
 }
 private int[][] boardSequence;
+private int[][] outgoingMoves;
 private ArrayList<int[]> boardMoves;
+
 /*  @throws IllegalArgumentException when either parameter is negative.
 */
 public KnightBoard(int startingRows,int startingCols){
@@ -36,15 +38,27 @@ public KnightBoard(int startingRows,int startingCols){
     throw new IllegalArgumentException();
   }
   boardSequence = new int[startingRows][startingCols];
+  outgoingMoves = new int[startingRows][startingCols];
   // initialize with all 0s
   for (int r = 0; r < startingRows; r++){
     for (int c = 0; c < startingCols; c++){
       boardSequence[r][c] = 0;
+      if (startingRows == 1 || startingCols == 1
+          || (startingRows == startingCols && startingRows < 3)){
+        outgoingMoves[r][c] = 0;
+      }
+      // 2 possible from the corners
+      if (startingRows >= 3 && startingCols >= 3 ){
+        if ( (r == 0 || r == outgoingMoves.length - 1)
+            && (c == 0 || c == outgoingMoves[0].length - 1)
+            ){
+            outgoingMoves[r][c] = 2;
+        }
+      }
 
     }
   }
   boardMoves = new ArrayList<int[]>();
-  outgoingMoves();
 }
 
 public String toString(){
@@ -70,12 +84,14 @@ public String toString(){
 }
 public String toStringMoves(){
   String boardStr = "";
-  for (int i = 0; i < boardSequence.length * boardSequence[0].length; i++){
-    if (boardMoves.get(i)[0] == 0){
-      boardStr += "  " + 0;
-    }
-    if (i%boardSequence[0].length == boardSequence[0].length -1){
-      boardStr += "\n";
+
+for (int r = 0; r < outgoingMoves.length; r++){
+    for (int c = 0; c < outgoingMoves[0].length; c++){
+      // add extra space if number is less than 10 for nice formatting
+      boardStr += "  " + outgoingMoves[r][c];
+      if (c == boardSequence[0].length - 1){
+        boardStr += "\n";
+      }
     }
   }
   return boardStr;
@@ -212,15 +228,10 @@ private boolean removeKnight(int row, int col, int level){
 }
 // fill out board with number of possible outgoing moves from each position
 private void outgoingMoves(){
-  for (int i = 0; i < boardSequence.length * boardSequence[0].length; i++){
-    int[] moveLocation = {0, i%boardSequence.length, i%boardSequence[0].length};
-    boardMoves.add(moveLocation);
-  // for boards with NO possible outgoing moves
-  if (boardSequence.length == 1 || boardSequence[0].length == 1
-  || (boardSequence.length == 2 && boardSequence[0].length == 2)){
+  for (int i = 0; i < boardSequence.length; i++){
 
   }
 }
-}
+
 
 }
