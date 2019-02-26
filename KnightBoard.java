@@ -31,6 +31,9 @@ private int[][] boardSequence;
 private int[][] outgoingMoves;
 private ArrayList<int[]> boardMoves;
 
+// possible knight boardMoves
+private int[] offsets = {1,2, 1,-2, -1,2, -1,-2, 2,1, 2,-1, -2,1, -2,-1};
+
 /*  @throws IllegalArgumentException when either parameter is negative.
 */
 public KnightBoard(int startingRows,int startingCols){
@@ -39,24 +42,20 @@ public KnightBoard(int startingRows,int startingCols){
   }
   boardSequence = new int[startingRows][startingCols];
   outgoingMoves = new int[startingRows][startingCols];
+
   // initialize with all 0s
-  for (int r = 0; r < startingRows; r++){
-    for (int c = 0; c < startingCols; c++){
+  for (int i = 0; i < boardSequence.length * boardSequence[0].length; i++){
+      int r = i % boardSequence.length;
+      int c = i % boardSequence[0].length;
       boardSequence[r][c] = 0;
-      if (startingRows == 1 || startingCols == 1
-          || (startingRows == startingCols && startingRows < 3)){
-        outgoingMoves[r][c] = 0;
-      }
-      // 2 possible from the corners
-      if (startingRows >= 3 && startingCols >= 3 ){
-        if ( (r == 0 || r == outgoingMoves.length - 1)
-            && (c == 0 || c == outgoingMoves[0].length - 1)
-            ){
-            outgoingMoves[r][c] = 2;
+      outgoingMoves[r][c] = 0;
+      // loop through move offsets, see if each is a possible move from the given row and col
+      for (int j = 0; j < 15; j++){
+        if (r + offsets[j] >= 0 && r + offsets[j] < boardSequence.length
+        &&  c + offsets[j+1] >= 0 && c + offsets[j+1] < boardSequence[0].length){
+          outgoingMoves[r][c]++;
         }
       }
-
-    }
   }
   boardMoves = new ArrayList<int[]>();
 }
