@@ -61,7 +61,6 @@ public KnightBoard(int startingRows,int startingCols){
       }
     }
   }
-  boardMoves = new ArrayList<int[]>();
 }
 
 public String toString(){
@@ -128,6 +127,32 @@ public boolean solve(int startingRow, int startingCol){
   }
   return solveH(startingRow, startingCol, 1);
 }
+// level is the # of the knight
+private boolean solveH(int row ,int col, int level){
+  /*System.out.println(KnightBoard.go(1,1));
+  System.out.println(this);
+  KnightBoard.wait(50);*/ //adjust this delay
+  // if all levels were reached, board is solveable. Return true
+  if (level > boardSequence.length * boardSequence[0].length){
+    return true;
+  }
+  else{
+    // check if knight can be added
+    if (addKnight(row,col,level)){
+      // recursively call on all possible moves
+      for (int i = 0; i < 15; i+= 2){
+        if (solveH(row+offsets[i],col+offsets[i+1],level+1)){
+          return true;
+        }
+      }
+      removeKnight(row, col, 0);
+    }
+
+  }
+
+  return false;
+}
+
 // count number of possible solutions from starting row, column.
 // throws IllegalStateException if board is in a non-zero state
 public int countSolutions(int startingRow, int startingCol){
@@ -160,32 +185,6 @@ private int countSolutionsH(int row, int col, int level){
   // return number of possible solutions
   return numSolns;
 }
-// level is the # of the knight
-private boolean solveH(int row ,int col, int level){
-  /*System.out.println(KnightBoard.go(1,1));
-  System.out.println(this);
-  KnightBoard.wait(50);*/ //adjust this delay
-  // if all levels were reached, board is solveable. Return true
-  if (level > boardSequence.length * boardSequence[0].length){
-    return true;
-  }
-  else{
-    // check if knight can be added
-    if (addKnight(row,col,level)){
-      boardSequence[row][col] = level;
-      // recursively call on all possible moves
-      for (int i = 0; i < 15; i+= 2){
-        if (solveH(row+offsets[i],col+offsets[i+1],level+1)){
-          return true;
-        }
-      }
-      removeKnight(row, col, 0);
-    }
-
-  }
-
-  return false;
-}
 
 // move knight by specified x (left/right) and y (up/down)
 private boolean addKnight(int row, int col, int level){
@@ -213,11 +212,17 @@ private boolean removeKnight(int row, int col, int level){
   return false;
 }
 // fill out board with number of possible outgoing moves from each position
-private void outgoingMoves(){
-  for (int i = 0; i < boardSequence.length; i++){
-
-  }
+private void updateMoves(int r, int c){
+    boardMoves = new ArrayList<int[]>();
+    for (int j = 0; j < 15; j += 2){
+      if (r + offsets[j] >= 0 && r + offsets[j] < boardSequence.length
+      &&  c + offsets[j+1] >= 0 && c + offsets[j+1] < boardSequence[0].length){
+        // each array contains number of possible moves from the given offset spot
+        int[] moveLocation = {outgoingMoves[r + offsets[j]][c + offsets[j+1]], offsets[j],offsets[j+1]};
+        boardMoves.add(moveLocation);
+    }
+   }
+   // Collections.sort(boardMoves);
 }
-
 
 }
