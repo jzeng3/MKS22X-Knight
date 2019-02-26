@@ -3,11 +3,11 @@ import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(5,4);
+    KnightBoard test = new KnightBoard(8,8);
     System.out.println(test + "test");
     System.out.println(test.toStringMoves());
-    System.out.println(test.countSolutions(0,0));
-    System.out.println(test);
+  //  System.out.println(test.countSolutions(0,0));
+  //  System.out.println(test);
     /*  for (int r = 0; r < 3; r++){
     for (int c = 0; c < 10; c++){
     if (test.solve(r,c)){
@@ -44,18 +44,22 @@ public KnightBoard(int startingRows,int startingCols){
   outgoingMoves = new int[startingRows][startingCols];
 
   // initialize with all 0s
-  for (int i = 0; i < boardSequence.length * boardSequence[0].length; i++){
-      int r = i % boardSequence.length;
-      int c = i % boardSequence[0].length;
+  for (int r = 0; r < boardSequence.length; r++){
+      for (int c = 0; c < boardSequence[0].length; c++){
       boardSequence[r][c] = 0;
       outgoingMoves[r][c] = 0;
       // loop through move offsets, see if each is a possible move from the given row and col
-      for (int j = 0; j < 15; j++){
+    //  System.out.println("("+r+", "+c+")");
+      for (int j = 0; j < 15; j+=2){
+      //  System.out.println(j);
         if (r + offsets[j] >= 0 && r + offsets[j] < boardSequence.length
         &&  c + offsets[j+1] >= 0 && c + offsets[j+1] < boardSequence[0].length){
+
           outgoingMoves[r][c]++;
+        //  System.out.println("("+r+", "+c+"), move by "+ offsets[j]+", " +offsets[j+1]+": " +outgoingMoves[r][c]);
         }
       }
+    }
   }
   boardMoves = new ArrayList<int[]>();
 }
