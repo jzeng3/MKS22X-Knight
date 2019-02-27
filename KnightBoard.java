@@ -7,28 +7,31 @@ public class KnightBoard{
       System.out.println("3 x 3 BOARD");
       KnightBoard test = new KnightBoard(3,3);
       System.out.println("SOLVEABLE FROM (0,0)?: " +test.solve(0,0)+"\n");
-System.out.println("6 x 6 BOARD");
-    KnightBoard test1 = new KnightBoard(6,6);
+      System.out.println("6 x 6 BOARD");
+      KnightBoard test1 = new KnightBoard(6,6);
 
-    System.out.println("SOLVEABLE FROM (0,0)?: " +test1.solve(0,0)+"\n");
-    System.out.println("5 x 5 BOARD");
-    KnightBoard test2 = new KnightBoard(5,5);
-    System.out.println("NUMBER OF SOLUTIONS FROM (0,0): "+ test2.countSolutions(0,0)+"\n");
-  }else if (args.length >= 2){
-    try{
-      int rows = Integer.parseInt(args[0]);
-      int cols = Integer.parseInt(args[1]);
-      KnightBoard a = new KnightBoard(rows, cols);
-      KnightBoard b = new KnightBoard(rows, cols);
-      System.out.println(rows+" X "+cols+" BOARD");
-      System.out.println("SOLVEABLE FROM (0,0)?: "+a.solve(0,0)+"\n");
-      if (rows < 6 && cols < 6){
-        System.out.println("NUMBER OF SOLUTIONS FROM (0,0): "+b.countSolutions(0,0)+"\n");
-      }
-    }catch(IllegalStateException e){
-      System.out.println("IllegalStateException caught in main");
+      System.out.println("SOLVEABLE FROM (0,0)?: " +test1.solve(0,0)+"\n");
+      System.out.println("5 x 5 BOARD");
+      KnightBoard test2 = new KnightBoard(5,5);
+      System.out.println("NUMBER OF SOLUTIONS FROM (0,0): "+ test2.countSolutions(0,0)+"\n");
     }
-  }
+    else if (args.length >= 2){
+      try{
+        int rows = Integer.parseInt(args[0]);
+        int cols = Integer.parseInt(args[1]);
+        KnightBoard a = new KnightBoard(rows, cols);
+        KnightBoard b = new KnightBoard(rows, cols);
+        System.out.println(rows+" X "+cols+" BOARD");
+        System.out.println("SOLVEABLE FROM (0,0)?: "+a.solve(0,0)+"\n");
+        if (rows < 6 && cols < 6){
+          System.out.println("NUMBER OF SOLUTIONS FROM (0,0): "+b.countSolutions(0,0)+"\n");
+        }
+      }catch(IllegalStateException e){
+        System.out.println("IllegalStateException caught in main");
+      }catch(IllegalArgumentException f){
+        System.out.println("IllegalArgumentException caught in main");
+      }
+    }
   }
   // m x n board to show sequence of knight moves
   private int[][] boardSequence;
@@ -67,7 +70,7 @@ System.out.println("6 x 6 BOARD");
     }
   }
 
-// toString for the boardSequence
+  // toString for the boardSequence
   public String toString(){
     String boardStr = "";
     for (int r = 0; r < boardSequence.length; r++){
@@ -137,7 +140,11 @@ System.out.println("6 x 6 BOARD");
   @throws IllegalArgumentException when either parameter is negative
   or out of bounds.*/
   public boolean solve(int startingRow, int startingCol){
-    // throw IllegalStateException if given non-positive starting rows or columns
+    // throw IllegalArgumentException if given non-positive or ount of bounds parameters
+    if (startingRow < 0 || startingCol < 0 || startingRow >= boardSequence.length || startingCol >= boardSequence[0].length){
+      throw new IllegalArgumentException();
+    }
+    // throw IllegalStateException if given non-empty board
     for (int i = 0; i < boardSequence.length; i++){
       if (boardSequence[i][0] != 0){
         throw new IllegalStateException();
@@ -187,7 +194,11 @@ System.out.println("6 x 6 BOARD");
 
   // count number of possible solutions from starting row, column.
   // throws IllegalStateException if board is in a non-zero state
+  // throws IllegalArgumentException if given non-positive or out of bounds parameters
   public int countSolutions(int startingRow, int startingCol){
+    if (startingRow < 0 || startingCol < 0 || startingRow >= boardSequence.length || startingCol >= boardSequence[0].length){
+      throw new IllegalArgumentException();
+    }
     for (int i = 0; i < boardSequence.length; i++){
       if (boardSequence[i][0] != 0){
         throw new IllegalStateException();
@@ -252,7 +263,7 @@ System.out.println("6 x 6 BOARD");
     // loop through all the possible moves
     for (int j = 0; j < 15; j += 2){
       /* if move is in range of the board and
-         the knight has not traveled to that position */
+      the knight has not traveled to that position */
       if (r + offsets[j] >= 0 && r + offsets[j] < boardSequence.length
       &&  c + offsets[j+1] >= 0 && c + offsets[j+1] < boardSequence[0].length
       && boardSequence[r + offsets[j]][c + offsets[j+1]] == 0){
@@ -271,7 +282,7 @@ System.out.println("6 x 6 BOARD");
     return boardMoves;
   }
 
-// insertion sort to sort the given arraylist
+  // insertion sort to sort the given arraylist
   public static void insertionSort(ArrayList<int[]> data){
 
     if (data.size() >= 2){
