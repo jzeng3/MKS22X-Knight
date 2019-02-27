@@ -3,10 +3,13 @@ import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(5,4);
+    KnightBoard test = new KnightBoard(3,3);
     System.out.println(test + "test");
     System.out.println(test.toStringMoves());
-    System.out.println(test.solve(0,0));
+  //  System.out.println(test.solve(0,0));
+  ArrayList<int[]> moves = new ArrayList<int[]>();
+  test.updateMoves(0,0, moves);
+  System.out.println(test.toStringMoves());
   // System.out.println(test.countSolutions(2,3));
     System.out.println(test);
     /*  for (int r = 0; r < 3; r++){
@@ -22,7 +25,7 @@ public class KnightBoard{
 }
 private int[][] boardSequence;
 private int[][] outgoingMoves;
-private ArrayList<int[]> boardMoves;
+private ArrayList<int[]> boardMoves = new ArrayList<int[]>();
 
 // possible knight boardMoves
 private int[] offsets = {1,2, 1,-2, -1,2, -1,-2, 2,1, 2,-1, -2,1, -2,-1};
@@ -216,14 +219,21 @@ public void updateMoves(int r, int c, ArrayList<int[]> boardMoves_){
       &&  c + offsets[j+1] >= 0 && c + offsets[j+1] < boardSequence[0].length
       && boardSequence[r + offsets[j]][c + offsets[j+1]] == 0){
         // each array contains number of possible moves from the given offset spot
+        // subtract one from outgoing moves because knight can't move back
+        outgoingMoves[r + offsets[j]][c + offsets[j+1]]--;
         int[] moveLocation = {outgoingMoves[r + offsets[j]][c + offsets[j+1]], offsets[j],offsets[j+1]};
         System.out.println(Arrays.toString(moveLocation));
-       boardMoves.add(moveLocation);
-       System.out.println(boardMoves_);
+       boardMoves_.add(moveLocation);
     }
    }
+   System.out.println(toStringMoves());
+   String toStr = "";
+   for (int i = 0; i < boardMoves.size(); i++){
+     toStr += Arrays.toString( boardMoves.get(i) );
+   }
+   System.out.println(toStr);
    // sort the moves
-   // insertionSort(boardMoves);
+   insertionSort(boardMoves);
 }
 
  public static void insertionSort(ArrayList<int[]> data){
