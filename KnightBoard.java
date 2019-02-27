@@ -3,15 +3,15 @@ import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(5,5);
+    KnightBoard test = new KnightBoard(3,10);
     System.out.println(test + "test");
     System.out.println(test.toStringMoves());
-  //  System.out.println(test.solve(0,0));
+    System.out.println(test.solve(0,0));
   ArrayList<int[]> moves = new ArrayList<int[]>();
-  test.addKnight(2,2,1);
+/*  test.addKnight(2,2,1);
   test.updateMoves(2,2, moves);
   test.updateMoves(0,1, moves);
-  test.updateMoves(2,0, moves);
+  test.updateMoves(2,0, moves);*/
   // System.out.println(test.countSolutions(2,3));
     System.out.println(test);
     /*  for (int r = 0; r < 3; r++){
@@ -128,6 +128,7 @@ public boolean solve(int startingRow, int startingCol)
 @throws IllegalArgumentException when either parameter is negative
 or out of bounds.*/
 public boolean solve(int startingRow, int startingCol){
+  // throw IllegalStateException if given non-positive starting rows or columns
   for (int i = 0; i < boardSequence.length; i++){
     if (boardSequence[i][0] != 0){
       throw new IllegalStateException();
@@ -137,22 +138,30 @@ public boolean solve(int startingRow, int startingCol){
 }
 // level is the # of the knight
 private boolean solveH(int row ,int col, int level){
-/*  System.out.println(KnightBoard.go(1,1));
+ System.out.println(KnightBoard.go(1,1));
   System.out.println(this);
-  KnightBoard.wait(50); */ //adjust this delay
+  KnightBoard.wait(100);  //adjust this delay
+
   // if all levels were reached, board is solveable. Return true
   if (level > boardSequence.length * boardSequence[0].length){
     return true;
   }
   else{
+  //  System.out.println("CAN KNIGHT BE ADDED TO "+row+ ", "+col);
     // check if knight can be added
     if (addKnight(row,col,level)){
+    //  System.out.println("KNIGHT ADDED: "+row+" "+col+" LEVEL " +level);
       // store possible moves and coordinates from this position
-      updateMoves(row, col, boardMoves);
+      ArrayList<int[]> move = new ArrayList<int[]>();
+      move = updateMoves(row, col, move);
+    //  System.out.println(move.size());
       // recursively call on all possible moves
-      for (int i = 0; i < boardMoves.size(); i++){
-        if (solveH(boardMoves.get(i)[1],boardMoves.get(i)[2],level+1)){
+      for (int i = 0; i < move.size(); i++){
+      //  System.out.println("TRYING THIS MOVE: "+Arrays.toString(move.get(i)));
+        if (solveH(row+move.get(i)[1],col+move.get(i)[2],level+1)){
           return true;
+        }else{
+          outgoingMoves[row+move.get(i)[1]][col+move.get(i)[2]]++;
         }
       }
       removeKnight(row, col, 0);
@@ -223,7 +232,7 @@ private boolean removeKnight(int row, int col, int level){
   return false;
 }
 // fill out board with number of possible outgoing moves from each position
-public void updateMoves(int r, int c, ArrayList<int[]> boardMoves_){
+public ArrayList<int[]> updateMoves(int r, int c, ArrayList<int[]> boardMoves_){
     boardMoves_ = new ArrayList<int[]>();
     for (int j = 0; j < 15; j += 2){
       if (r + offsets[j] >= 0 && r + offsets[j] < boardSequence.length
@@ -233,51 +242,55 @@ public void updateMoves(int r, int c, ArrayList<int[]> boardMoves_){
         // subtract one from outgoing moves because knight can't move back
 
         outgoingMoves[r + offsets[j]][c + offsets[j+1]]--;
-
+        if (outgoingMoves[r + offsets[j]][c + offsets[j+1]] > 0){
         int[] moveLocation = {outgoingMoves[r + offsets[j]][c + offsets[j+1]], offsets[j],offsets[j+1]};
-        System.out.println(Arrays.toString(moveLocation));
-       boardMoves_.add(moveLocation);
+        boardMoves_.add(moveLocation);
+        }
+      //  System.out.println(Arrays.toString(moveLocation));
+
     }
+
    }
-   System.out.println(toStringMoves());
-   System.out.println("unsorted moves "+toStringBoardMoves(boardMoves_));
+//   System.out.println(toStringMoves());
+  // System.out.println("unsorted moves "+toStringBoardMoves(boardMoves_));
 
    // sort the moves
   insertionSort(boardMoves_);
-  System.out.println(boardMoves_.size());
+//  System.out.println(boardMoves_.size());
   System.out.println("sorted moves "+toStringBoardMoves(boardMoves_));
+  return boardMoves_;
 }
 
  public static void insertionSort(ArrayList<int[]> data){
-   System.out.println("DEBUGGING FOR INSERTIONSORT");
-   System.out.println("DATA SIZE: " + data.size());
+//   System.out.println("DEBUGGING FOR INSERTIONSORT");
+  // System.out.println("DATA SIZE: " + data.size());
   if (data.size() >= 2){
-    System.out.println("FIRST IF");
+  //  System.out.println("FIRST IF");
     // loop through arrayList, checking number at current index relative to previous numbers
     for (int i = 0; i < data.size(); i++){
       // current number
       int[] current = data.get(i);
-      System.out.println("CURRENT: " + Arrays.toString(current));
+  //    System.out.println("CURRENT: " + Arrays.toString(current));
       int index = i;
       for (int j = i; j >= 0; j--){
         int[] temp = data.get(j);
      // inner loop checks if previous elements (number of moves) are greater than current element
       if (current[0] < data.get(j)[0]){
-        System.out.println(current[0] + " < " + data.get(j)[0]);
+    //    System.out.println(current[0] + " < " + data.get(j)[0]);
         // store the previous array
         data.set(j+1, temp);
-        System.out.println("TEMP: " + Arrays.toString(temp));
+      //  System.out.println("TEMP: " + Arrays.toString(temp));
 
        // if current number of moves for outer loop is less than the previous number(s) of moves
             // previous array moves up a space
             data.set( j+1, temp );
-            System.out.println("MOVING TEMP UP: "+Arrays.toString(data.get(j+1)));
+          //  System.out.println("MOVING TEMP UP: "+Arrays.toString(data.get(j+1)));
             // current array will be put at a smaller index
             index--;
         }
         // set array at index equal to current array (sorted)
         data.set(index, current);
-        System.out.println("SETTING INDEX TO ORIGINAL: "+Arrays.toString(data.get(index)));
+        // System.out.println("SETTING INDEX TO ORIGINAL: "+Arrays.toString(data.get(index)));
       }
      }
     }
