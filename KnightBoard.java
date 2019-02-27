@@ -3,26 +3,13 @@ import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(5,4);
+    KnightBoard test = new KnightBoard(5,5);
     System.out.println(test + "test");
     System.out.println(test.toStringMoves());
     System.out.println(test.solve(0,0));
-  ArrayList<int[]> moves = new ArrayList<int[]>();
-/*  test.addKnight(2,2,1);
-  test.updateMoves(2,2, moves);
-  test.updateMoves(0,1, moves);
-  test.updateMoves(2,0, moves);*/
-  // System.out.println(test.countSolutions(2,3));
+    KnightBoard test1 = new KnightBoard(5,5);
+   System.out.println(test1.countSolutions(0,0));
     System.out.println(test);
-    /*  for (int r = 0; r < 3; r++){
-    for (int c = 0; c < 10; c++){
-    if (test.solve(r,c)){
-    System.out.println(test);
-    c = 10;
-    r = 3;
-
-  }
-}*/
 
 }
 private int[][] boardSequence;
@@ -204,8 +191,6 @@ private int countSolutionsH(int row, int col, int level){
   int numSolns = 0;
   // if knight can be added, try different possibilities for next level
   if (addKnight(row, col, level)){
-
-    updateMoves(row,col, boardMoves);
     for (int i = 0; i < 15; i+= 2){
         numSolns += countSolutionsH(row+offsets[i],col+offsets[i+1],level+1);
     }
