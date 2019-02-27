@@ -3,13 +3,15 @@ import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(3,3);
+    KnightBoard test = new KnightBoard(5,5);
     System.out.println(test + "test");
     System.out.println(test.toStringMoves());
   //  System.out.println(test.solve(0,0));
   ArrayList<int[]> moves = new ArrayList<int[]>();
-  test.updateMoves(0,0, moves);
-  System.out.println(test.toStringMoves());
+  test.addKnight(2,2,1);
+  test.updateMoves(2,2, moves);
+  test.updateMoves(0,1, moves);
+  test.updateMoves(2,0, moves);
   // System.out.println(test.countSolutions(2,3));
     System.out.println(test);
     /*  for (int r = 0; r < 3; r++){
@@ -80,6 +82,8 @@ public String toString(){
   }
   return boardStr;
 }
+
+// for the board of outgoing moves
 public String toStringMoves(){
   String boardStr = "";
 
@@ -93,6 +97,14 @@ for (int r = 0; r < outgoingMoves.length; r++){
     }
   }
   return boardStr;
+}
+// for the arraylist that contains possible moves and coordinates
+public  String toStringBoardMoves(ArrayList<int[]> board){
+  String toStr = "";
+  for (int i = 0; i < board.size(); i++){
+    toStr += Arrays.toString( board.get(i) );
+  }
+return toStr;
 }
 // taken from Mr. K's website for debugging
 public static String go(int x,int y){
@@ -213,49 +225,61 @@ private boolean removeKnight(int row, int col, int level){
 // fill out board with number of possible outgoing moves from each position
 public void updateMoves(int r, int c, ArrayList<int[]> boardMoves_){
     boardMoves_ = new ArrayList<int[]>();
-    System.out.println(boardMoves_);
     for (int j = 0; j < 15; j += 2){
       if (r + offsets[j] >= 0 && r + offsets[j] < boardSequence.length
       &&  c + offsets[j+1] >= 0 && c + offsets[j+1] < boardSequence[0].length
       && boardSequence[r + offsets[j]][c + offsets[j+1]] == 0){
         // each array contains number of possible moves from the given offset spot
         // subtract one from outgoing moves because knight can't move back
+
         outgoingMoves[r + offsets[j]][c + offsets[j+1]]--;
+
         int[] moveLocation = {outgoingMoves[r + offsets[j]][c + offsets[j+1]], offsets[j],offsets[j+1]};
         System.out.println(Arrays.toString(moveLocation));
        boardMoves_.add(moveLocation);
     }
    }
    System.out.println(toStringMoves());
-   String toStr = "";
-   for (int i = 0; i < boardMoves.size(); i++){
-     toStr += Arrays.toString( boardMoves.get(i) );
-   }
-   System.out.println(toStr);
+   System.out.println("unsorted moves "+toStringBoardMoves(boardMoves_));
+
    // sort the moves
-   insertionSort(boardMoves);
+  insertionSort(boardMoves_);
+  System.out.println(boardMoves_.size());
+  System.out.println("sorted moves "+toStringBoardMoves(boardMoves_));
 }
 
  public static void insertionSort(ArrayList<int[]> data){
+   System.out.println("DEBUGGING FOR INSERTIONSORT");
+   System.out.println("DATA SIZE: " + data.size());
   if (data.size() >= 2){
-    // loop through array, checking number at current index relative to previous numbers
+    System.out.println("FIRST IF");
+    // loop through arrayList, checking number at current index relative to previous numbers
     for (int i = 0; i < data.size(); i++){
       // current number
-      int[] original = data.get(i);
-      int index = i-1;
-     // inner loop checks if previous elements are greater than current element
-      while (index >= 0 && data.get(i)[0] > original[0]){
-        // store the previous number
-        int temp[] = data.get(index);
-       // if current num for outer loop is less than the previous number(s)
-            // previous number moves up a space
-            data.set( index+1, temp );
-            // current number will be put at a smaller index
+      int[] current = data.get(i);
+      System.out.println("CURRENT: " + Arrays.toString(current));
+      int index = i;
+      for (int j = i; j >= 0; j--){
+        int[] temp = data.get(j);
+     // inner loop checks if previous elements (number of moves) are greater than current element
+      if (current[0] < data.get(j)[0]){
+        System.out.println(current[0] + " < " + data.get(j)[0]);
+        // store the previous array
+        data.set(j+1, temp);
+        System.out.println("TEMP: " + Arrays.toString(temp));
+
+       // if current number of moves for outer loop is less than the previous number(s) of moves
+            // previous array moves up a space
+            data.set( j+1, temp );
+            System.out.println("MOVING TEMP UP: "+Arrays.toString(data.get(j+1)));
+            // current array will be put at a smaller index
             index--;
         }
-        // set element at index equal to current number (sorted)
-        data.set(index+1, original);
+        // set array at index equal to current array (sorted)
+        data.set(index, current);
+        System.out.println("SETTING INDEX TO ORIGINAL: "+Arrays.toString(data.get(index)));
       }
+     }
     }
   }
 
