@@ -3,10 +3,11 @@ import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(2,2);
+    KnightBoard test = new KnightBoard(5,4);
     System.out.println(test + "test");
     System.out.println(test.toStringMoves());
     System.out.println(test.solve(0,0));
+  // System.out.println(test.countSolutions(2,3));
     System.out.println(test);
     /*  for (int r = 0; r < 3; r++){
     for (int c = 0; c < 10; c++){
@@ -17,14 +18,6 @@ public class KnightBoard{
 
   }
 }*/
-/*  test.moveKnight(0,0,2,1);
-System.out.println(test);
-test.moveKnight(2,1,-2,-1);
-System.out.println(test);
-test.moveKnight(0,0,1,2);
-System.out.println(test);
-test.moveKnight(1,2,1,-2);
-System.out.println(test);*/
 
 }
 private int[][] boardSequence;
@@ -87,9 +80,9 @@ public String toString(){
 public String toStringMoves(){
   String boardStr = "";
 
+// prints out m x n board with number of outgoing moves from each position
 for (int r = 0; r < outgoingMoves.length; r++){
     for (int c = 0; c < outgoingMoves[0].length; c++){
-      // add extra space if number is less than 10 for nice formatting
       boardStr += "  " + outgoingMoves[r][c];
       if (c == boardSequence[0].length - 1){
         boardStr += "\n";
@@ -129,9 +122,9 @@ public boolean solve(int startingRow, int startingCol){
 }
 // level is the # of the knight
 private boolean solveH(int row ,int col, int level){
-  /*System.out.println(KnightBoard.go(1,1));
+/*  System.out.println(KnightBoard.go(1,1));
   System.out.println(this);
-  KnightBoard.wait(50);*/ //adjust this delay
+  KnightBoard.wait(50); */ //adjust this delay
   // if all levels were reached, board is solveable. Return true
   if (level > boardSequence.length * boardSequence[0].length){
     return true;
@@ -139,10 +132,11 @@ private boolean solveH(int row ,int col, int level){
   else{
     // check if knight can be added
     if (addKnight(row,col,level)){
-      updateMoves(row, col);
+      // store possible moves and coordinates from this position
+      updateMoves(row, col, boardMoves);
       // recursively call on all possible moves
-      for (int i = 0; i < 15; i+= 2){
-        if (solveH(row+offsets[i],col+offsets[i+1],level+1)){
+      for (int i = 0; i < boardMoves.size(); i++){
+        if (solveH(boardMoves.get(i)[1],boardMoves.get(i)[2],level+1)){
           return true;
         }
       }
@@ -177,6 +171,7 @@ private int countSolutionsH(int row, int col, int level){
   int numSolns = 0;
   // if knight can be added, try different possibilities for next level
   if (addKnight(row, col, level)){
+    updateMoves(row,col, boardMoves);
     for (int i = 0; i < 15; i+= 2){
         numSolns += countSolutionsH(row+offsets[i],col+offsets[i+1],level+1);
     }
@@ -213,18 +208,22 @@ private boolean removeKnight(int row, int col, int level){
   return false;
 }
 // fill out board with number of possible outgoing moves from each position
-private void updateMoves(int r, int c){
-    boardMoves = new ArrayList<int[]>();
+public void updateMoves(int r, int c, ArrayList<int[]> boardMoves_){
+    boardMoves_ = new ArrayList<int[]>();
+    System.out.println(boardMoves_);
     for (int j = 0; j < 15; j += 2){
       if (r + offsets[j] >= 0 && r + offsets[j] < boardSequence.length
-      &&  c + offsets[j+1] >= 0 && c + offsets[j+1] < boardSequence[0].length){
+      &&  c + offsets[j+1] >= 0 && c + offsets[j+1] < boardSequence[0].length
+      && boardSequence[r + offsets[j]][c + offsets[j+1]] == 0){
         // each array contains number of possible moves from the given offset spot
         int[] moveLocation = {outgoingMoves[r + offsets[j]][c + offsets[j+1]], offsets[j],offsets[j+1]};
-        boardMoves.add(moveLocation);
+        System.out.println(Arrays.toString(moveLocation));
+       boardMoves.add(moveLocation);
+       System.out.println(boardMoves_);
     }
    }
    // sort the moves
-   insertionSort(boardMoves);
+   // insertionSort(boardMoves);
 }
 
  public static void insertionSort(ArrayList<int[]> data){
