@@ -3,7 +3,7 @@ import java.io.*;
 public class KnightBoard{
 
   public static void main(String[] args){
-    KnightBoard test = new KnightBoard(3,10);
+    KnightBoard test = new KnightBoard(5,4);
     System.out.println(test + "test");
     System.out.println(test.toStringMoves());
     System.out.println(test.solve(0,0));
@@ -138,9 +138,12 @@ public boolean solve(int startingRow, int startingCol){
 }
 // level is the # of the knight
 private boolean solveH(int row ,int col, int level){
- System.out.println(KnightBoard.go(1,1));
-  System.out.println(this);
-  KnightBoard.wait(100);  //adjust this delay
+  System.out.println(toString());
+  System.out.println(toStringMoves());
+/*  System.out.println(KnightBoard.go(1,1));
+  System.out.println(toStringMoves());
+
+  KnightBoard.wait(100);*/  //adjust this delay
 
   // if all levels were reached, board is solveable. Return true
   if (level > boardSequence.length * boardSequence[0].length){
@@ -150,7 +153,8 @@ private boolean solveH(int row ,int col, int level){
   //  System.out.println("CAN KNIGHT BE ADDED TO "+row+ ", "+col);
     // check if knight can be added
     if (addKnight(row,col,level)){
-    //  System.out.println("KNIGHT ADDED: "+row+" "+col+" LEVEL " +level);
+
+      System.out.println("KNIGHT ADDED: "+row+" "+col+" LEVEL " +level);
       // store possible moves and coordinates from this position
       ArrayList<int[]> move = new ArrayList<int[]>();
       move = updateMoves(row, col, move);
@@ -164,8 +168,13 @@ private boolean solveH(int row ,int col, int level){
           outgoingMoves[row+move.get(i)[1]][col+move.get(i)[2]]++;
         }
       }
-      removeKnight(row, col, 0);
+      if (move.size() == 0){
+        if (solveH(row,col,level+1)){
+          return true;
+        }
+      }
     }
+    removeKnight(row, col, 0);
 
   }
 
@@ -195,6 +204,7 @@ private int countSolutionsH(int row, int col, int level){
   int numSolns = 0;
   // if knight can be added, try different possibilities for next level
   if (addKnight(row, col, level)){
+
     updateMoves(row,col, boardMoves);
     for (int i = 0; i < 15; i+= 2){
         numSolns += countSolutionsH(row+offsets[i],col+offsets[i+1],level+1);
@@ -238,11 +248,12 @@ public ArrayList<int[]> updateMoves(int r, int c, ArrayList<int[]> boardMoves_){
       if (r + offsets[j] >= 0 && r + offsets[j] < boardSequence.length
       &&  c + offsets[j+1] >= 0 && c + offsets[j+1] < boardSequence[0].length
       && boardSequence[r + offsets[j]][c + offsets[j+1]] == 0){
+        System.out.println("Fits on the board");
         // each array contains number of possible moves from the given offset spot
         // subtract one from outgoing moves because knight can't move back
-
+        if (outgoingMoves[r + offsets[j]][c + offsets[j+1]] >= 0){
+        System.out.println("To be added on the board");
         outgoingMoves[r + offsets[j]][c + offsets[j+1]]--;
-        if (outgoingMoves[r + offsets[j]][c + offsets[j+1]] > 0){
         int[] moveLocation = {outgoingMoves[r + offsets[j]][c + offsets[j+1]], offsets[j],offsets[j+1]};
         boardMoves_.add(moveLocation);
         }
